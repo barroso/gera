@@ -1,0 +1,22 @@
+package views
+{
+    import components.TaskGroup;
+    
+    import models.<%= entity.capitalize %>;
+
+    public class <%= entity.capitalize %>ViewCreator implements ViewCreator
+    {
+        public function get objectClass():Class
+        {
+            return <%= entity.capitalize %>;
+        }
+        
+        public function createView(object:*):TaskGroup
+        {
+            var view:<%= entity.capitalize %>View = new <%= entity.capitalize %>View;
+            view.model =  object;
+            view.entities = <%= entity.capitalize.pluralize %>.instancia;
+            return view;
+        }
+    }
+}

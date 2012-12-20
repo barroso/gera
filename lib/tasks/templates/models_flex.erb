@@ -1,0 +1,25 @@
+package views
+{
+    import models.<%= entity.capitalize %>;
+    import models.Entities;
+    import models.Entity;
+    
+    import remote.RemoteServices;
+    
+    import rex.services.ResourceService;
+
+    public class <%= entity.capitalize.pluralize %> extends Entities
+    {
+        static public var instancia:<%= entity.capitalize.pluralize %> = new <%= entity.capitalize.pluralize %>;
+        
+        override protected function getResourceService():ResourceService
+        {
+            return RemoteServices.<%= entity.pluralize %>;
+        }
+		
+        override protected function createNew():Entity
+        {
+            return new <%= entity.capitalize %>;
+        }
+    }
+}

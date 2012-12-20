@@ -1,0 +1,16 @@
+package models
+{
+    import remote.RemoteServices;
+    
+    import rex.services.ResourceService;
+    
+	[Bindable]
+	public class <%= entity.capitalize %> extends Entity
+	{        
+        override protected function getResourceService():ResourceService
+        {
+            return RemoteServices.<%= entity.pluralize %>;
+        }
+        
+	}
+}

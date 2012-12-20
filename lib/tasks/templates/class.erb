@@ -1,0 +1,55 @@
+package remote
+{
+    import mx.rpc.AsyncToken;
+    import rex.services.ResourceService;
+    import rex.services.RemoteService;
+    
+    public class <%= service_name %> extends ResourceService
+    {
+        public var service:RemoteService = new RemoteService;
+<%
+resource_methods = %w{index search update create save new edit show destroy}
+controller = controller_name.constantize
+valid_routes = routes.select{|r|controller.instance_methods.include?(r.requirements[:action].to_sym)}
+created_methods = []
+valid_routes.each do |route|
+  action_name = route.requirements[:action]          
+  next if created_methods.include?(action_name)
+  created_methods << action_name
+
+  params = controller.instance_method(action_name).parameters #.map{|p| p[1].to_s}
+  route_verb = route.verb.source[1...-1]
+  route_path = route.path.spec
+  params_in_route = route_path.to_s.scan(/:([^:\/\(\)]+)/).flatten
+  unless (params.reject{|p| params_in_route.include?(p[1].to_s)}.empty?)
+    params.reject!{|p| params_in_route.include?(p[1].to_s)}
+  end
+%>
+        /**
+         * <b>Route:</b>
+         * <pre> <%= route_verb %> <%= route_path %></pre>
+         * <b>Action/Controller:</b>
+         * <pre> <%= route.requirements.to_s.gsub(" ","&nbsp;") %></pre><%
+  params.each do |p| %>
+         * @param <%= p[1] %><%
+  end %>
+         */<%
+  method_params = params.map{|p| p[1].to_s + ':*' + ((p[0]==:opt)?' = null':'')}
+  method_params.push('params:Object = null')
+  override = resource_methods.include?(action_name)?'override ':''
+  action_name = '_new' if action_name == 'new' 
+  default_param = (params.empty?)?'null': params.first[1].to_s %>
+        <%= override %>public function <%= action_name %>(<%= method_params.join(', ') %>):AsyncToken
+        {
+            params ||= {};
+<%
+  params.each do |p| %>
+            params['<%= p[1] %>'] = <%= p[1] %>;<%
+  end %>                     
+            var url:String = service.routeToUrl("<%= route_path %>", params, <%= default_param %>);
+              
+            return service.send("<%= action_name %>", {params: params}, url, null, "<%= route_verb %>");  
+        }
+<% end %>
+    }
+}

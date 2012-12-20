@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<views:EntitiesView xmlns:fx="http://ns.adobe.com/mxml/2009"
+						xmlns:s="library://ns.adobe.com/flex/spark"
+						xmlns:mx="library://ns.adobe.com/flex/mx"
+						xmlns:views="views.*"
+                        title="<%= entity.capitalize.pluralize %>">
+
+	<fx:Script>
+		<![CDATA[
+            [Bindable]
+			public var model:<%= entity.capitalize.pluralize %> = <%= entity.capitalize.pluralize %>.instancia;
+		]]>
+	</fx:Script>
+	
+	<views:gridColumns>
+		<s:GridColumn dataField="nome" headerText="Nome"/>
+	</views:gridColumns>
+	
+</views:EntitiesView>

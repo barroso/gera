@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<views:EntityView xmlns:fx="http://ns.adobe.com/mxml/2009" 
+                       xmlns:s="library://ns.adobe.com/flex/spark" 
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       xmlns:components="components.*"
+                       xmlns:views="views.*"
+                       title="<%= entity.capitalize %>">
+    
+    <fx:Script>
+        <![CDATA[
+            import models.<%= entity.capitalize %>;
+            
+            [Bindable]
+            public var model:<%= entity.capitalize %>;
+        ]]>
+    </fx:Script>
+    
+    <views:form>
+        <s:VGroup>
+            <components:RowGroup>
+                <components:FieldGroup>
+                    <s:Label text="Nome:"/>
+                    <components:TextBox text="@{model.nome}"
+                                        typicalLength="30" 
+                                        required="true"/>
+                </components:FieldGroup>
+            </components:RowGroup>
+        </s:VGroup>
+    </views:form>
+    
+</views:EntityView>
